@@ -1,7 +1,12 @@
+import { useUser } from '../../hooks/useUser'
+
 const Home = () => {
+  const user = useUser()
+
   return (
     <main>
-      <h1>Bonjour</h1>
+      {user ? <h1>{`Bonjour ${user.userInfos.firstName}`}</h1> : null}
+      <h2>Félicitation ! Vous avez explosé vos objectifs hier 👏</h2>
     </main>
   )
 }
