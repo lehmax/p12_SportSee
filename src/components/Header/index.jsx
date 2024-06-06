@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom'
-import logo from '../../assets/logo.svg'
+import Logo from '../../assets/logo.svg?react'
 import styles from './header.module.scss'
 
 const Header = () => {
   return (
     <header className={styles.header}>
-      <img alt="Kasa logo" src={logo} />
+      <Logo />
       <nav>
         <NavLink to="/">Accueil</NavLink>
         <NavLink to="/profil">Profil</NavLink>

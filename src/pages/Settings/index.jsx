@@ -1,8 +1,8 @@
 const Settings = () => {
   return (
-    <div>
+    <main>
       <h1>Réglages</h1>
-    </div>
+    </main>
   )
 }
 
