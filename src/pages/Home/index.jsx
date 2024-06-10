@@ -6,15 +6,22 @@ const Title = () => {
 
   if (!user?.userInfos) return false
 
-  return <h1>{`Bonjour ${user.userInfos.firstName}`}</h1>
+  return (
+    <h1 className="mb-5 text-5xl">
+      <span>{'Bonjour '}</span>
+      <strong className="text-red">{user.userInfos.firstName}</strong>
+    </h1>
+  )
 }
 
 const Home = () => {
   return (
     <main>
-      <section>
+      <section className="mb-12">
         <Title />
-        <h2>Félicitation ! Vous avez explosé vos objectifs hier 👏</h2>
+        <h2 className="text-lg">
+          Félicitation ! Vous avez explosé vos objectifs hier 👏
+        </h2>
       </section>
       <section className="grid grid-cols-4 gap-8">
         <div className="col-span-3" />
