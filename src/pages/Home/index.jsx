@@ -1,3 +1,4 @@
+import RadialBarChart from '../../charts/RadialBarChart'
 import NutriCards from '../../components/NutriCards'
 import { useCurrentUser } from '../../hooks/useUser'
 
@@ -14,6 +15,18 @@ const Title = () => {
   )
 }
 
+const ScoreChart = () => {
+  const user = useCurrentUser()
+
+  if (!user?.score) return false
+
+  return (
+    <div className="flex items-center justify-center p-12 rounded-xl bg-blueLight">
+      <RadialBarChart data={user.score} />
+    </div>
+  )
+}
+
 const Home = () => {
   return (
     <main>
@@ -24,7 +37,11 @@ const Home = () => {
         </h2>
       </section>
       <section className="grid grid-cols-4 gap-8">
-        <div className="col-span-3" />
+        <div className="col-span-3">
+          <div className="bg-blueLight">
+            <ScoreChart />
+          </div>
+        </div>
         <div className="grid gap-8 grid-cols-subgrid">
           <NutriCards />
         </div>
