@@ -1,17 +1,19 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext } from 'react'
 import { useFetch } from '../hooks/useFetch'
 
-export const UserContext = createContext()
+export const CurrentUserContext = createContext()
+export const UserActivityContext = createContext()
+export const UserAverageSessionContext = createContext()
+export const UserPerformanceContext = createContext()
 
-export const UserProvider = ({ children }) => {
-  const { data } = useFetch('http://localhost:3000/user/18')
-  const [user, setUser] = useState(null)
+export const CurrentUserProvider = ({ children }) => {
+  const { data: userInfo, isError } = useFetch(import.meta.env.VITE_ENDPOINT)
 
-  useEffect(() => {
-    if (!data) return
+  if (!userInfo || isError) return false
 
-    setUser(data.data)
-  }, [data])
-
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>
+  return (
+    <CurrentUserContext.Provider value={userInfo.data}>
+      {children}
+    </CurrentUserContext.Provider>
+  )
 }

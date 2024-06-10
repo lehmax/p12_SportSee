@@ -1,18 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  --gray: hsl(228deg 9% 50%);
-  --grey-light: hsl(0deg 0% 98%);
-  --grey-dark: hsl(0deg 0% 59%);
-  --red: hsl(0deg 100% 50%);
-  --red-light: hsl(0deg 68% 95%);
-  --red-dark: hsl(0deg 100% 45%);
-  --blue: hsl(204deg 100% 65%);
-  --blue-dark: hsl(228deg 29% 18%);
-  --blue-light: hsl(203deg 69% 95%);
-  --yellow: hsl(48deg 98% 52%);
-  --yellow-light: hsl(46deg 73% 94%);
-  --magenta: hsl(343deg 98% 65%);
-  --magenta-light: hsl(342deg 68% 95%);
-  --black: hsl(240deg 20% 1%);
+  --grey: #73788c;
+  --grey-light: #fafafa;
+  --grey-dark: #969696;
+  --red: #ff0000;
+  --red-light: #fbeaea;
+  --red-dark: #e60000;
+  --blue: #4db8ff;
+  --blue-dark: #21263b;
+  --blue-light: #e9f4fb;
+  --yellow: #fdcd0d;
+  --yellow-light: #fbf6e5;
+  --magenta: #fd4e80;
+  --magenta-light: #fbeaef;
+  --black: #020203;
+  --white: white;
   --bar-bg-color: var(--black);
   --accent-color: var(--red);
 }
@@ -28,11 +33,10 @@
 }
 
 main {
-  padding: 150px 210px;
+  padding: 150px 30px 30px 210px;
 }
 
 body {
-  font-family: 'Roboto', system-ui, sans-serif;
   font-weight: 500;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
