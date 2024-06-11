@@ -12,7 +12,7 @@ export const CurrentUserProvider = ({ children }) => {
   if (!userInfo || isError) return false
 
   return (
-    <CurrentUserContext.Provider value={userInfo.data}>
+    <CurrentUserContext.Provider value={userInfo}>
       {children}
     </CurrentUserContext.Provider>
   )

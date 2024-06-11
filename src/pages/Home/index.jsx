@@ -1,6 +1,10 @@
-import RadialBarChart from '../../charts/RadialBarChart'
+import LineChart from '../../components/LineChart'
 import NutriCards from '../../components/NutriCards'
+
+import { useFetch } from '../../hooks/useFetch'
 import { useCurrentUser } from '../../hooks/useUser'
+
+const sessionEndpoint = `${import.meta.env.VITE_ENDPOINT}/average-sessions`
 
 const Title = () => {
   const user = useCurrentUser()
@@ -15,16 +19,12 @@ const Title = () => {
   )
 }
 
-const ScoreChart = () => {
-  const user = useCurrentUser()
+const AverageSessionChart = () => {
+  const { data, isError } = useFetch(sessionEndpoint)
 
-  if (!user?.score) return false
+  if (!data?.sessions || isError) return false
 
-  return (
-    <div className="flex items-center justify-center p-12 rounded-xl bg-blueLight">
-      <RadialBarChart data={user.score} />
-    </div>
-  )
+  return <LineChart data={data.sessions} title="Durée moyenne des sessions" />
 }
 
 const Home = () => {
@@ -38,11 +38,11 @@ const Home = () => {
       </section>
       <section className="grid grid-cols-4 gap-8">
         <div className="col-span-3">
-          <div className="bg-blueLight">
-            <ScoreChart />
+          <div className="grid grid-cols-3 gap-8 grid-rows-subgrid">
+            <AverageSessionChart />
           </div>
         </div>
-        <div className="grid gap-8 grid-cols-subgrid">
+        <div className="grid gap-8">
           <NutriCards />
         </div>
       </section>
