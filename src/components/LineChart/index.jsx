@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import { useMemo } from 'react'
 
-const getDimensions = () => {
+const initDimensions = () => {
   const width = 300
   const height = 263
   const marginTop = 150
@@ -18,7 +18,7 @@ const getDimensions = () => {
 }
 
 const properties = (data) => {
-  const dimensions = getDimensions()
+  const dimensions = initDimensions()
   const yAccessor = (data) => data.sessionLength
   const xAccessor = (data) => data.day
 
