@@ -1,29 +1,38 @@
 import * as d3 from 'd3'
+import { useMemo } from 'react'
 
-const settings = {
-  width: 300,
-  height: 263,
-  marginTop: 150,
-  marginBottom: 20,
+const getDimensions = () => {
+  const width = 300
+  const height = 263
+  const marginTop = 150
+  const marginBottom = 20
+  const innerHeight = height - marginTop - marginBottom
+
+  return {
+    width,
+    height,
+    marginTop,
+    marginBottom,
+    innerHeight,
+  }
 }
 
-const week = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
-
-const LineChart = ({ title, data }) => {
-  const width = settings.width
-  const height = settings.height - settings.marginTop - settings.marginBottom
+const properties = (data) => {
+  const dimensions = getDimensions()
   const yAccessor = (data) => data.sessionLength
   const xAccessor = (data) => data.day
+
+  const week = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
 
   const xScale = d3
     .scaleLinear()
     .domain(d3.extent(data, xAccessor))
-    .rangeRound([20, width])
+    .rangeRound([20, dimensions.width])
 
   const yScale = d3
     .scaleLinear()
     .domain(d3.extent(data, yAccessor))
-    .rangeRound([height, 0])
+    .rangeRound([dimensions.innerHeight, 0])
 
   const ticks = xScale.ticks(week.length).map((value) => ({
     value,
@@ -37,6 +46,22 @@ const LineChart = ({ title, data }) => {
     .y((d) => yScale(yAccessor(d)))
     .curve(d3.curveNatural)
 
+  return {
+    dimensions,
+    xScale,
+    yScale,
+    ticks,
+    lineGenerator,
+  }
+}
+
+const LineChart = ({ title, data }) => {
+  const { dimensions, ticks, lineGenerator } = useMemo(
+    () => properties(data),
+    []
+  )
+  const { marginTop } = dimensions
+
   return (
     <div className="relative w-full rounded bg-red aspect-square">
       <span className="absolute text-white top-5 left-5">{title}</span>
@@ -46,14 +71,11 @@ const LineChart = ({ title, data }) => {
           fill="none"
           stroke="white"
           strokeWidth="3"
-          transform={`translate(-30, ${settings.marginTop - 50}), scale(1.25)`}
+          transform={`translate(-30, ${marginTop - 50}), scale(1.25)`}
         />
-        <g transform={`translate(0 ${settings.marginTop})`}>
+        <g transform={`translate(0 ${marginTop})`}>
           {ticks.map(({ value, label, xOffset }) => (
-            <g
-              key={value}
-              transform={`translate(${xOffset}, ${settings.marginTop})`}
-            >
+            <g key={value} transform={`translate(${xOffset}, ${marginTop})`}>
               <text
                 key={value}
                 style={{
