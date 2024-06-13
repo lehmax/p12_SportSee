@@ -1,6 +1,16 @@
 import * as d3 from 'd3'
 import { useMemo, useState } from 'react'
 
+const week = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
+const yAccessor = (data) => data.sessionLength
+const xAccessor = (data) => data.day
+const initTooltipData = {
+  visible: false,
+  x: null,
+  y: null,
+  value: '',
+}
+
 const initDimensions = () => {
   const width = 300
   const height = 263
@@ -19,18 +29,22 @@ const initDimensions = () => {
 
 const properties = (data) => {
   const dimensions = initDimensions()
-  const yAccessor = (data) => data.sessionLength
-  const xAccessor = (data) => data.day
 
   const xScale = d3
-    .scalePoint()
-    .domain(data.map(xAccessor))
-    .range([20, dimensions.width])
+    .scaleLinear()
+    .domain(d3.extent(data, xAccessor))
+    .rangeRound([20, dimensions.width])
 
   const yScale = d3
     .scaleLinear()
     .domain([0, d3.max(data, yAccessor)])
     .range([dimensions.innerHeight, 0])
+
+  const ticks = xScale.ticks(week.length).map((value) => ({
+    value,
+    label: week[value - 1],
+    xOffset: xScale(value),
+  }))
 
   const lineGenerator = d3
     .line()
@@ -40,6 +54,7 @@ const properties = (data) => {
 
   return {
     dimensions,
+    ticks,
     xScale,
     yScale,
     lineGenerator,
@@ -47,41 +62,32 @@ const properties = (data) => {
 }
 
 const LineChart = ({ title, data }) => {
-  const week = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
-  const { xScale, yScale, dimensions, lineGenerator } = useMemo(
+  const [tooltipData, setTooltipData] = useState(initTooltipData)
+  const { xScale, yScale, dimensions, lineGenerator, ticks } = useMemo(
     () => properties(data),
     []
   )
 
-  const initTooltipData = {
-    visible: false,
-    x: null,
-    y: null,
-    value: '',
+  const onLeave = () => setTooltipData({ ...initTooltipData, visible: false })
+
+  const bisect = d3.bisector(xAccessor).left
+  const onMove = (event) => {
+    const [pointerX] = d3.pointer(event)
+    console.log(pointerX)
+    const indexFound = bisect(data, xScale.invert(pointerX), 1)
+    const session = data[indexFound]
+
+    if (!session) return
+
+    setTooltipData({
+      visible: true,
+      x: xScale(session.day),
+      y: yScale(session.sessionLength),
+      value: session.sessionLength,
+    })
   }
-  const [tooltipData, setTooltipData] = useState(initTooltipData)
 
   const { marginTop } = dimensions
-
-  //const bisect = d3.bisector((data) => data.day).left
-  const onMove = (event) => {
-    const pointerXPosition = d3.pointer(event)[0]
-    // const dayValue = xScale.invert(pointerXPosition)
-    // const indexFound = bisect(data, dayValue, 1)
-    // const selectedData = data[indexFound]
-    // if (!selectedData) return
-    // setTooltipData({
-    //   ...setTooltipData,
-    //   visible: true,
-    //   x: xScale(selectedData.day),
-    //   y: yScale(selectedData.sessionLength),
-    //   value: yScale(selectedData.sessionLength),
-    // })
-  }
-
-  const onLeave = () => {
-    setTooltipData({ ...initTooltipData })
-  }
 
   return (
     <div className="relative w-full rounded-xl bg-red aspect-square">
@@ -95,7 +101,6 @@ const LineChart = ({ title, data }) => {
         onPointerLeave={onLeave}
       >
         <defs>
-          {/* <rect fill="none" width={width} height={height} pointerEvents="all" /> */}
           <linearGradient
             gradientUnits="userSpaceOnUse"
             id="gradient"
@@ -116,17 +121,17 @@ const LineChart = ({ title, data }) => {
           transform={`translate(-30, ${marginTop - 50}), scale(1.25)`}
         />
         <g transform={`translate(0 ${marginTop})`}>
-          {data.map(({ day }, i) => (
-            <g key={i} transform={`translate(${xScale(day)}, ${marginTop})`}>
+          {ticks.map(({ value, label, xOffset }) => (
+            <g key={value} transform={`translate(${xOffset}, ${marginTop})`}>
               <text
+                key={value}
                 style={{
-                  fontSize: '14px',
+                  fontSize: '12px',
                   textAnchor: 'middle',
                   fill: 'white',
-                  opacity: '0.5',
                 }}
               >
-                {week[day - 1]}
+                {label}
               </text>
             </g>
           ))}
