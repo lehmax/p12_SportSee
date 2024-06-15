@@ -2,8 +2,9 @@ import * as d3 from 'd3'
 import { useMemo, useState } from 'react'
 
 const week = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
-const yAccessor = (data) => data.sessionLength
-const xAccessor = (data) => data.day
+const yAccessor = data => data.sessionLength
+const xAccessor = data => data.day
+
 const initTooltipData = {
   visible: false,
   x: null,
@@ -12,35 +13,33 @@ const initTooltipData = {
 }
 
 const initDimensions = () => {
-  const width = 300
+  const width = 320
   const height = 263
-  const marginTop = 150
-  const marginBottom = 20
-  const innerHeight = height - marginTop - marginBottom
+  const marginTop = 110
+  const innerHeight = height - marginTop
 
   return {
     width,
     height,
     marginTop,
-    marginBottom,
     innerHeight,
   }
 }
 
-const properties = (data) => {
+const properties = data => {
   const dimensions = initDimensions()
 
   const xScale = d3
     .scaleLinear()
     .domain(d3.extent(data, xAccessor))
-    .rangeRound([20, dimensions.width])
+    .rangeRound([0, 350])
 
   const yScale = d3
     .scaleLinear()
-    .domain([0, d3.max(data, yAccessor)])
+    .domain(d3.extent(data, yAccessor))
     .range([dimensions.innerHeight, 0])
 
-  const ticks = xScale.ticks(week.length).map((value) => ({
+  const ticks = xScale.ticks(week.length).map(value => ({
     value,
     label: week[value - 1],
     xOffset: xScale(value),
@@ -48,8 +47,8 @@ const properties = (data) => {
 
   const lineGenerator = d3
     .line()
-    .x((d) => xScale(xAccessor(d)))
-    .y((d) => yScale(yAccessor(d)))
+    .x(d => xScale(xAccessor(d)))
+    .y(d => yScale(yAccessor(d)))
     .curve(d3.curveNatural)
 
   return {
@@ -62,35 +61,39 @@ const properties = (data) => {
 }
 
 const LineChart = ({ title, data }) => {
+  const extendedData = [
+    { day: 0, sessionLength: 0 },
+    ...data,
+    { day: 8, sessionLength: 0 },
+  ]
   const [tooltipData, setTooltipData] = useState(initTooltipData)
   const { xScale, yScale, dimensions, lineGenerator, ticks } = useMemo(
-    () => properties(data),
+    () => properties(extendedData),
     []
   )
 
   const onLeave = () => setTooltipData({ ...initTooltipData, visible: false })
 
   const bisect = d3.bisector(xAccessor).left
-  const onMove = (event) => {
+  const onMove = event => {
     const [pointerX] = d3.pointer(event)
-    console.log(pointerX)
     const indexFound = bisect(data, xScale.invert(pointerX), 1)
-    const session = data[indexFound]
+    const session = data[indexFound - 1]
 
-    if (!session) return
+    if (!session) return false
 
     setTooltipData({
       visible: true,
       x: xScale(session.day),
       y: yScale(session.sessionLength),
-      value: session.sessionLength,
+      value: `${session.sessionLength} min`,
     })
   }
 
   const { marginTop } = dimensions
 
   return (
-    <div className="relative w-full rounded-xl bg-red aspect-square">
+    <div className="relative w-full rounded-xl bg-redDark aspect-square">
       <span className="absolute text-white opacity-50 text- top-10 left-10 max-w-40">
         {title}
       </span>
@@ -113,16 +116,18 @@ const LineChart = ({ title, data }) => {
             <stop offset="100%" stopColor="white" />
           </linearGradient>
         </defs>
-        <path
-          d={lineGenerator(data)}
-          fill="none"
-          stroke="url('#gradient')"
-          strokeWidth="2"
-          transform={`translate(-30, ${marginTop - 50}), scale(1.25)`}
-        />
-        <g transform={`translate(0 ${marginTop})`}>
+        <g transform={`translate(-10,  ${marginTop})`}>
+          <path
+            d={lineGenerator(extendedData)}
+            fill="none"
+            stroke="url('#gradient')"
+            strokeWidth="3"
+          />
           {ticks.map(({ value, label, xOffset }) => (
-            <g key={value} transform={`translate(${xOffset}, ${marginTop})`}>
+            <g
+              key={value}
+              transform={`translate(${xOffset}, ${marginTop + 100})`}
+            >
               <text
                 key={value}
                 style={{
@@ -136,7 +141,10 @@ const LineChart = ({ title, data }) => {
             </g>
           ))}
         </g>
-        <g className={!tooltipData.visible ? 'hidden' : ''}>
+        <g
+          transform={`translate(-10,  ${marginTop})`}
+          className={!tooltipData.visible ? 'hidden' : ''}
+        >
           <circle
             cx={tooltipData.x}
             cy={tooltipData.y}
@@ -146,25 +154,26 @@ const LineChart = ({ title, data }) => {
             strokeOpacity="50%"
             fill="white"
           />
-          <g>
-            <rect
-              x={tooltipData.x + 4}
-              y={tooltipData.y - 11}
-              width="39px"
-              height="25px"
-              fill="white"
-            />
-            <text
-              x="8px"
-              y="12px"
-              fontFamily="Verdana"
-              fontSize="8px"
-              fontWeight="500"
-              fill="black"
-            >
-              {tooltipData.value}
-            </text>
-          </g>
+
+          <rect
+            x={tooltipData.x - 20}
+            y={tooltipData.y - 50}
+            width="40px"
+            height="25px"
+            fill="white"
+            rx="5"
+            ry="5"
+          />
+          <text
+            x={tooltipData.x - 13}
+            y={tooltipData.y - 34}
+            fontFamily="Verdana"
+            fontSize="8px"
+            fontWeight="500"
+            fill="black"
+          >
+            {tooltipData.value}
+          </text>
         </g>
       </svg>
     </div>

@@ -12,11 +12,13 @@ module.exports = {
   settings: { react: { version: '18.2' } },
   plugins: ['react-refresh', 'react', 'react-hooks'],
   rules: {
+    'no-var': 'error',
     'react/jsx-no-target-blank': 'off',
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
     ],
+    'object-curly-newline': 'off',
     'react/prefer-stateless-function': 'error',
     'react/button-has-type': 'error',
     'react/jsx-pascal-case': 'error',
