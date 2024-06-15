@@ -93,14 +93,12 @@ const LineChart = ({ title, data }) => {
   const { marginTop } = dimensions
 
   return (
-    <div className="relative w-full overflow-hidden rounded-xl bg-redDark aspect-square">
+    <div className="relative w-full overflow-hidden rounded-xl bg-redDark2 aspect-square">
       <div
-        style={{ width: `${tooltipData.x - 10}px` }}
-        className={
-          !tooltipData.visible
-            ? 'hidden'
-            : 'absolute top-0 left-0 z-10 h-full bg-red'
-        }
+        style={{ transform: `translateX(${tooltipData.x - 10}px)` }}
+        className={`w-full absolute top-0 transition duration-300 ease-in-out left-0 z-10 h-full bg-redDark ${
+          !tooltipData.visible ? 'opacity-0' : 'opacity-100'
+        }`}
       />
       <div className="relative z-20 w-full h-full">
         <span className="absolute text-white opacity-50 text- top-10 left-10 max-w-40">
@@ -152,7 +150,7 @@ const LineChart = ({ title, data }) => {
           </g>
           <g
             transform={`translate(-10,  ${marginTop})`}
-            className={!tooltipData.visible ? 'hidden' : ''}
+            className={!tooltipData.visible ? 'opacity-0' : ''}
           >
             <circle
               cx={tooltipData.x}

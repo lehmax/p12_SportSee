@@ -19,6 +19,7 @@ export default {
       red: 'var(--red)',
       redLight: 'var(--red-light)',
       redDark: 'var(--red-dark)',
+      redDark2: 'var(--red-dark2)',
       blue: 'var(--blue)',
       blueDark: 'var(--blue-dark)',
       blueLight: 'var(--blue-light)',
