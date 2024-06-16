@@ -37,7 +37,7 @@ const AverageSessionChart = () => {
 
   if (!data?.sessions || isError) return false
 
-  return <LineChart data={data.sessions} title="Durée moyenne des sessions" />
+  return <LineChart data={data.sessions} />
 }
 
 const PerformanceChart = () => {
@@ -53,7 +53,7 @@ const ScoreChart = () => {
 
   if (!user?.todayScore) return false
 
-  return <RadialBarChart data={user.todayScore} title="Score" />
+  return <RadialBarChart data={user.todayScore} />
 }
 
 const NutriCards = () => {

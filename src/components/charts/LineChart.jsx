@@ -43,7 +43,7 @@ const properties = data => {
   }
 }
 
-export const LineChart = ({ data, title = '' }) => {
+export const LineChart = ({ data }) => {
   const extendedData = [
     { day: 0, sessionLength: 0 },
     ...data,
@@ -76,11 +76,6 @@ export const LineChart = ({ data, title = '' }) => {
 
   return (
     <div className="relative w-full overflow-hidden rounded-xl bg-redDark2 aspect-square">
-      {title !== '' && (
-        <span className="absolute text-white opacity-50 top-5 left-10 max-w-40">
-          {title}
-        </span>
-      )}
       <svg
         className="w-full h-full"
         viewBox="0 0 260 260"
@@ -113,6 +108,28 @@ export const LineChart = ({ data, title = '' }) => {
           fillOpacity={!tooltipData.visible ? '0' : '1'}
           transform={`translate(${tooltipData.x - 10},0)`}
         />
+
+        <text>
+          <tspan
+            x="20"
+            y="30"
+            fill="#ffffff"
+            fontSize="0.9375rem"
+            fillOpacity="0.5"
+          >
+            Durée moyenne des
+          </tspan>
+          <tspan
+            x="20"
+            y="30"
+            dy="25"
+            fill="#ffffff"
+            fontSize="0.9375rem"
+            fillOpacity="0.5"
+          >
+            sessions
+          </tspan>
+        </text>
         <g transform={`translate(-10,  ${marginTop})`}>
           <path
             d={lineGenerator(extendedData)}
@@ -165,8 +182,7 @@ export const LineChart = ({ data, title = '' }) => {
           <text
             x={tooltipData.x - 13}
             y={tooltipData.y - 34}
-            fontFamily="Verdana"
-            fontSize="8px"
+            fontSize="0.5rem"
             fontWeight="500"
             fill="black"
           >

@@ -32,8 +32,8 @@ const properties = data => {
       return {
         key,
         value: labels[value],
-        x: Math.cos(i * angle - Math.PI / 2) * (maxRadius + 8),
-        y: Math.sin(i * angle - Math.PI / 2) * (maxRadius + 14),
+        x: Math.cos(i * angle - Math.PI / 2) * (maxRadius + 28),
+        y: Math.sin(i * angle - Math.PI / 2) * (maxRadius + 10),
       }
     })
 
@@ -66,7 +66,7 @@ export const RadarChart = ({ data }) => {
                 d={path}
                 fill="none"
                 stroke="white"
-                strokeWidth="1  px"
+                strokeWidth="1px"
               />
             ))}
           </g>
@@ -79,7 +79,7 @@ export const RadarChart = ({ data }) => {
                 y={data.y}
                 fill="white"
                 fontSize="12px"
-                textAnchor={data.x < 0 ? 'end' : 'start'}
+                textAnchor="middle"
               >
                 {data.value}
               </text>

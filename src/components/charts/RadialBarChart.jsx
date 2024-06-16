@@ -7,7 +7,7 @@ const properties = data => {
   const angle = d3
     .scaleLinear()
     .domain([0, 100])
-    .range([0, 2 * Math.PI])
+    .range([0, -2 * Math.PI])
 
   const backgroundArc = d3
     .arc()
@@ -27,25 +27,25 @@ const properties = data => {
 
   return {
     radius,
-    arc,
-    backgroundArc,
+    arc: arc(),
+    backgroundArc: backgroundArc(),
   }
 }
 
-export const RadialBarChart = ({ data, title = '' }) => {
+export const RadialBarChart = ({ data }) => {
   const { radius, arc, backgroundArc } = properties(data)
 
   return (
     <div className="relative w-full overflow-hidden rounded-xl bg-blueLight aspect-square">
-      {title !== '' && (
-        <span className="absolute text-DarkBlue top-5 left-10 max-w-40">
-          {title}
-        </span>
-      )}
       <svg className="w-full h-full" viewBox="0 0 260 260">
+        <text>
+          <tspan x="30" y="40" fill="#20253A" fontSize="0.9375rem">
+            Score
+          </tspan>
+        </text>
         <circle cx="130" cy="130" r={radius} fill="white" />
         <path
-          d={backgroundArc()}
+          d={backgroundArc}
           fill="#FBFBFB"
           stroke="#FBFBFB"
           strokeWidth="1"
@@ -53,7 +53,7 @@ export const RadialBarChart = ({ data, title = '' }) => {
           strokeLinejoin="round"
         />
         <path
-          d={arc()}
+          d={arc}
           fill="#FF0000"
           stroke="#FF0000"
           strokeWidth="1"
@@ -61,13 +61,35 @@ export const RadialBarChart = ({ data, title = '' }) => {
           strokeLinejoin="round"
         />
         <text>
-          <tspan x="50%" y="50%" textAnchor="middle">
+          <tspan
+            x="50%"
+            y="50%"
+            dy="-10px"
+            textAnchor="middle"
+            fontWeight="bold"
+            fontSize="1.625rem"
+            fill="#282D30"
+          >
             {data * 100}%
           </tspan>
-          <tspan x="50%" y="50%" textAnchor="middle" dy="20px">
+          <tspan
+            x="50%"
+            y="50%"
+            textAnchor="middle"
+            dy="16px"
+            fontSize="1rem"
+            fill="#74798C"
+          >
             de votre
           </tspan>
-          <tspan x="50%" y="50%" textAnchor="middle" dy="40px">
+          <tspan
+            x="50%"
+            y="50%"
+            fontSize="1rem"
+            textAnchor="middle"
+            dy="40px"
+            fill="#74798C"
+          >
             objectif
           </tspan>
         </text>
