@@ -54,7 +54,7 @@ export const LineChart = ({ data }) => {
     () => properties(extendedData),
     []
   )
-  const marginTop = 50
+  const marginTop = 55
 
   const onLeave = () => setTooltipData({ ...initTooltipData, visible: false })
 

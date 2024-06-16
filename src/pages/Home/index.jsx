@@ -29,7 +29,7 @@ const ActivityChart = () => {
 
   if (!data?.sessions || isError) return false
 
-  return <BarChart data={data.session} title="Score" />
+  return <BarChart data={data.sessions} title="Score" />
 }
 
 const AverageSessionChart = () => {
@@ -51,9 +51,17 @@ const PerformanceChart = () => {
 const ScoreChart = () => {
   const user = useCurrentUser()
 
-  if (!user?.todayScore) return false
+  let data = ''
 
-  return <RadialBarChart data={user.todayScore} />
+  if (user?.todayScore) {
+    data = user.todayScore
+  } else if (user?.score) {
+    data = user.score
+  } else {
+    return false
+  }
+
+  return <RadialBarChart data={data} />
 }
 
 const NutriCards = () => {
