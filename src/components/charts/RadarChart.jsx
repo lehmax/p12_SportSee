@@ -2,8 +2,6 @@ import * as d3 from 'd3'
 import { useMemo } from 'react'
 
 const properties = data => {
-  console.log(data)
-
   const labels = {
     intensity: 'Intensité',
     speed: 'Vitesse',
@@ -12,8 +10,8 @@ const properties = data => {
     energy: 'Énergie',
     cardio: 'Cardio',
   }
-
   const levelsDiameter = [22.5, 45, 90, 135, 180]
+  const values = data.data.map(d => d.value)
   const maxRadius = levelsDiameter[levelsDiameter.length - 1] / 2
   const length = 6
   const angle = (2 * Math.PI) / length
@@ -43,9 +41,9 @@ const properties = data => {
     .lineRadial()
     .angle((_, i) => i * angle)
     .curve(d3.curveLinearClosed)
-    .radius((data, i) => data * maxRadius)
+    .radius(data => (data / Math.max(...values)) * maxRadius)
 
-  const valuePath = valuePolygon(data.data.reverse().map(d => d.value))
+  const valuePath = valuePolygon(values.reverse())
 
   return {
     axis,
@@ -54,9 +52,8 @@ const properties = data => {
   }
 }
 
-const RadarChart = ({ data }) => {
+export const RadarChart = ({ data }) => {
   const { axis, categories, valuePath } = useMemo(() => properties(data), [])
-  console.log(axis, categories)
 
   return (
     <div className="relative w-full overflow-hidden rounded-xl bg-blueDark2 aspect-square">
@@ -97,5 +94,3 @@ const RadarChart = ({ data }) => {
     </div>
   )
 }
-
-export default RadarChart

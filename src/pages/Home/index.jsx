@@ -1,12 +1,15 @@
-import LineChart from '../../components/LineChart'
-import NutriCards from '../../components/NutriCards'
-import RadarChart from '../../components/RadarChart'
+import { ENDPOINTS } from '../../config'
+
+import NutriCard from '../../components/NutriCard'
+import {
+  BarChart,
+  LineChart,
+  RadarChart,
+  RadialBarChart,
+} from '../../components/charts'
 
 import { useFetch } from '../../hooks/useFetch'
 import { useCurrentUser } from '../../hooks/useUser'
-
-const sessionEndpoint = `${import.meta.env.VITE_ENDPOINT}/average-sessions`
-const PerformanceEndpoint = `${import.meta.env.VITE_ENDPOINT}/performance`
 
 const Title = () => {
   const user = useCurrentUser()
@@ -21,8 +24,16 @@ const Title = () => {
   )
 }
 
+const ActivityChart = () => {
+  const { data, isError } = useFetch(ENDPOINTS.activity)
+
+  if (!data?.sessions || isError) return false
+
+  return <BarChart data={data.session} title="Score" />
+}
+
 const AverageSessionChart = () => {
-  const { data, isError } = useFetch(sessionEndpoint)
+  const { data, isError } = useFetch(ENDPOINTS.averageSession)
 
   if (!data?.sessions || isError) return false
 
@@ -30,11 +41,35 @@ const AverageSessionChart = () => {
 }
 
 const PerformanceChart = () => {
-  const { data, isError } = useFetch(PerformanceEndpoint)
+  const { data, isError } = useFetch(ENDPOINTS.performance)
 
   if (!data || isError) return false
 
   return <RadarChart data={data} />
+}
+
+const ScoreChart = () => {
+  const user = useCurrentUser()
+
+  console.log('user', user)
+
+  if (!user?.todayScore) return false
+
+  return <RadialBarChart data={user.todayScore} title="Score" />
+}
+
+const NutriCards = () => {
+  const user = useCurrentUser()
+
+  if (!user?.keyData) return false
+
+  return (
+    <div className="grid h-full gap-10">
+      {Object.entries(user.keyData).map(([key, value]) => (
+        <NutriCard id={key} key={key} value={value} />
+      ))}
+    </div>
+  )
 }
 
 const Home = () => {
@@ -46,14 +81,20 @@ const Home = () => {
           Félicitation ! Vous avez explosé vos objectifs hier 👏
         </h2>
       </section>
-      <section className="grid grid-cols-4 gap-8">
-        <div className="col-span-3">
-          <div className="grid grid-cols-3 gap-8 grid-rows-subgrid">
-            <AverageSessionChart />
-            <PerformanceChart />
-          </div>
+      <section className="grid grid-cols-4 grid-rows-4 gap-8">
+        <div className="col-span-3 row-span-2">
+          <ActivityChart />
         </div>
-        <div className="grid gap-8">
+        <div className="row-span-2">
+          <AverageSessionChart />
+        </div>
+        <div className="row-span-2">
+          <PerformanceChart />
+        </div>
+        <div className="row-span-2">
+          <ScoreChart />
+        </div>
+        <div className="col-start-4 row-span-4 row-start-1">
           <NutriCards />
         </div>
       </section>

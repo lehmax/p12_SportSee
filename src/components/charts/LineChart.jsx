@@ -60,7 +60,7 @@ const properties = data => {
   }
 }
 
-const LineChart = ({ title, data }) => {
+export const LineChart = ({ data, title = '' }) => {
   const extendedData = [
     { day: 0, sessionLength: 0 },
     ...data,
@@ -101,9 +101,11 @@ const LineChart = ({ title, data }) => {
         }`}
       />
       <div className="relative z-20 w-full h-full">
-        <span className="absolute text-white opacity-50 text- top-10 left-10 max-w-40">
-          {title}
-        </span>
+        {title !== '' && (
+          <span className="absolute text-white opacity-50 top-10 left-10 max-w-40">
+            {title}
+          </span>
+        )}
         <svg
           className="w-full h-full"
           onPointerEnter={onMove}
@@ -187,5 +189,3 @@ const LineChart = ({ title, data }) => {
     </div>
   )
 }
-
-export default LineChart

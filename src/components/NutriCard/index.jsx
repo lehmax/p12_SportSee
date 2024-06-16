@@ -2,7 +2,6 @@ import IconCalorie from '../../assets/calorie.svg?react'
 import IconCarb from '../../assets/carb.svg?react'
 import IconLipid from '../../assets/lipid.svg?react'
 import IconProtein from '../../assets/protein.svg?react'
-import { useCurrentUser } from '../../hooks/useUser'
 
 const NUTRI_CONF = {
   calorieCount: {
@@ -52,18 +51,4 @@ const NutriCard = ({ id, value }) => {
   )
 }
 
-const NutriCards = () => {
-  const user = useCurrentUser()
-
-  if (!user?.keyData) return false
-
-  return (
-    <div className="flex flex-col gap-10">
-      {Object.entries(user.keyData).map(([key, value]) => (
-        <NutriCard id={key} key={key} value={value} />
-      ))}
-    </div>
-  )
-}
-
-export default NutriCards
+export default NutriCard
