@@ -8,7 +8,7 @@ export const RadialBarChart = ({ data, title = '' }) => {
           {title}
         </span>
       )}
-      <svg width="100%" height="100%" />
+      <svg className="w-full h-full" viewBox="0 0 260 260" />
     </div>
   )
 }

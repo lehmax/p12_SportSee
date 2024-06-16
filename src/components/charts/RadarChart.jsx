@@ -57,7 +57,7 @@ export const RadarChart = ({ data }) => {
 
   return (
     <div className="relative w-full overflow-hidden rounded-xl bg-blueDark2 aspect-square">
-      <svg width="100%" height="100%" viewBox="0 0 260 260">
+      <svg className="w-full h-full" viewBox="0 0 260 260">
         <g transform="translate(130, 130)">
           <g>
             {axis.map((path, index) => (

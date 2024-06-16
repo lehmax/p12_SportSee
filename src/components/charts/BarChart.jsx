@@ -8,7 +8,7 @@ export const BarChart = ({ data, title = '' }) => {
           {title}
         </span>
       )}
-      <svg width="100%" height="100%" />
+      <svg className="w-full h-full" />
     </div>
   )
 }
