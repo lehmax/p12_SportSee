@@ -96,7 +96,7 @@ const LineChart = ({ title, data }) => {
     <div className="relative w-full overflow-hidden rounded-xl bg-redDark2 aspect-square">
       <div
         style={{ transform: `translateX(${tooltipData.x - 10}px)` }}
-        className={`w-full absolute top-0 transition duration-300 ease-in-out left-0 z-10 h-full bg-redDark ${
+        className={`w-full absolute top-0 transition duration-200 ease-in-out left-0 z-10 h-full bg-redDark ${
           !tooltipData.visible ? 'opacity-0' : 'opacity-100'
         }`}
       />

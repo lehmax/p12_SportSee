@@ -1,10 +1,12 @@
 import LineChart from '../../components/LineChart'
 import NutriCards from '../../components/NutriCards'
+import RadarChart from '../../components/RadarChart'
 
 import { useFetch } from '../../hooks/useFetch'
 import { useCurrentUser } from '../../hooks/useUser'
 
 const sessionEndpoint = `${import.meta.env.VITE_ENDPOINT}/average-sessions`
+const PerformanceEndpoint = `${import.meta.env.VITE_ENDPOINT}/performance`
 
 const Title = () => {
   const user = useCurrentUser()
@@ -27,6 +29,14 @@ const AverageSessionChart = () => {
   return <LineChart data={data.sessions} title="Durée moyenne des sessions" />
 }
 
+const PerformanceChart = () => {
+  const { data, isError } = useFetch(PerformanceEndpoint)
+
+  if (!data || isError) return false
+
+  return <RadarChart data={data} />
+}
+
 const Home = () => {
   return (
     <main>
@@ -40,6 +50,7 @@ const Home = () => {
         <div className="col-span-3">
           <div className="grid grid-cols-3 gap-8 grid-rows-subgrid">
             <AverageSessionChart />
+            <PerformanceChart />
           </div>
         </div>
         <div className="grid gap-8">
