@@ -51,8 +51,6 @@ const PerformanceChart = () => {
 const ScoreChart = () => {
   const user = useCurrentUser()
 
-  console.log('user', user)
-
   if (!user?.todayScore) return false
 
   return <RadialBarChart data={user.todayScore} title="Score" />
