@@ -34,7 +34,7 @@ const NutriCard = ({ id, value }) => {
   const { icon, type, color, unit } = NUTRI_CONF[id]
 
   return (
-    <div className="flex items-center gap-6 p-8 bg-greyLight">
+    <div className="flex items-center gap-6 p-8 rounded-md bg-greyLight">
       <div
         className={`${color} flex p-4 w-[60px] h-[60px] justify-center items-center rounded-md`}
       >

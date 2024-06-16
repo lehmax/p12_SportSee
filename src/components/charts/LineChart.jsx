@@ -129,6 +129,7 @@ export const LineChart = ({ data, title = '' }) => {
                 key={value}
                 style={{
                   fontSize: '10px',
+                  fillOpacity: '0.5',
                   textAnchor: 'middle',
                   fill: 'white',
                 }}
