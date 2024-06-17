@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 const weightAccessor = data => data.kilogram
 const yAccessor = weightAccessor
@@ -53,34 +53,34 @@ const properties = data => {
 }
 
 export const BarChart = ({ data }) => {
-  console.log(data)
+  const [tooltip, setTooltip] = useState({
+    display: false,
+    data: {},
+    pos: { x: 0, y: 0 },
+  })
+
   const { xTicks, ySteps, xScale0, xScale1, yScaleCalories, yScaleKilogram } =
     useMemo(() => properties(data), [])
+
+  const onEnter = (event, data) => {
+    console.log(data)
+    setTooltip({
+      display: true,
+      data: {
+        kilogram: data.kilogram,
+        calories: data.calories,
+      },
+      pos: { x: event.clientX, y: event.clientY },
+    })
+  }
+
+  const onLeave = () => {
+    setTooltip({ ...tooltip, display: false })
+  }
 
   return (
     <div className="relative w-full h-full overflow-hidden rounded-xl bg-greyLight">
       <svg className="w-full h-full" viewBox="0 0 800 300">
-        <text>
-          <tspan x="30" y="40" fill="#20253A" fontSize="0.9375rem">
-            Activité quotidienne
-          </tspan>
-        </text>
-        <g>
-          <circle cx="570" cy="35" r="3" fill="#282D30" />
-          <text>
-            <tspan x="582" y="40" fill="#20253A" fontSize="0.875rem">
-              Poids (kg)
-            </tspan>
-          </text>
-        </g>
-        <g>
-          <circle cx="680" cy="35" r="3" fill="#E60000" />
-          <text>
-            <tspan x="692" y="40" fill="#20253A" fontSize="0.875rem">
-              Calories (kCal)
-            </tspan>
-          </text>
-        </g>
         <g>
           <path d="M 40 250 H 760" stroke="#DEDEDE" />
           {xTicks.map(({ value, xOffset }, i) => (
@@ -118,6 +118,14 @@ export const BarChart = ({ data }) => {
         </g>
         {data.map(data => (
           <g key={data.day} transform={`translate(${xScale0(data.day)},0)`}>
+            <rect
+              fill="#DFDFDF"
+              y="250"
+              width={xScale0.bandwidth() * 2.5}
+              height="250"
+              onPointerLeave={onLeave}
+              onPointerEnter={event => onEnter(event, data)}
+            />
             {keys.map(key => (
               <rect
                 key={key}
@@ -140,28 +148,27 @@ export const BarChart = ({ data }) => {
             ))}
           </g>
         ))}
-        {/* {weightRectangles.map((data, i) => (
-          <rect
-            key={i}
-            x={data.x}
-            y={data.y}
-            width={data.width}
-            height={data.height}
-            fill="#282D30"
-            rx="5"
-          />
-        ))}
-        {caloriesRectangles.map((data, i) => (
-          <rect
-            key={i}
-            x={data.x}
-            y={data.y}
-            width={data.width}
-            height={data.height}
-            fill="#E60000"
-            rx="5"
-          />
-        ))} */}
+        <text>
+          <tspan x="30" y="40" fill="#20253A" fontSize="0.9375rem">
+            Activité quotidienne
+          </tspan>
+        </text>
+        <g>
+          <circle cx="570" cy="35" r="3" fill="#282D30" />
+          <text>
+            <tspan x="582" y="40" fill="#20253A" fontSize="0.875rem">
+              Poids (kg)
+            </tspan>
+          </text>
+        </g>
+        <g>
+          <circle cx="680" cy="35" r="3" fill="#E60000" />
+          <text>
+            <tspan x="692" y="40" fill="#20253A" fontSize="0.875rem">
+              Calories (kCal)
+            </tspan>
+          </text>
+        </g>
       </svg>
     </div>
   )
