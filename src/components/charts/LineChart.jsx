@@ -50,16 +50,17 @@ export const LineChart = ({ data }) => {
     ...data,
     { day: 8, sessionLength: 0 },
   ]
+
   const [tooltipData, setTooltipData] = useState(initTooltipData)
   const { xScale, yScale, lineGenerator, ticks } = useMemo(
     () => properties(extendedData),
     []
   )
+
   const marginTop = 55
 
-  const onLeave = () => setTooltipData({ ...initTooltipData, visible: false })
-
   const bisect = d3.bisector(xAccessor).left // create a bisector to find the closest data point
+
   const onMove = event => {
     const [pointerX] = d3.pointer(event)
     const indexFound = bisect(data, xScale.invert(pointerX), 1) // find the closest data point from cursor
@@ -74,6 +75,8 @@ export const LineChart = ({ data }) => {
       value: `${session.sessionLength} min`,
     })
   }
+
+  const onLeave = () => setTooltipData({ ...initTooltipData })
 
   return (
     <div className="relative w-full overflow-hidden rounded-xl bg-redDark2 aspect-square">

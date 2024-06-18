@@ -56,7 +56,6 @@ export const BarChart = ({ data }) => {
   const [tooltip, setTooltip] = useState({
     display: false,
     data: {},
-    pos: { x: 0, y: 0 },
   })
 
   const {
@@ -68,7 +67,7 @@ export const BarChart = ({ data }) => {
     yScaleKilogram,
   } = useMemo(() => properties(data), [])
 
-  const onEnter = (event, data) => {
+  const onEnter = data => {
     setTooltip({
       display: true,
       data: {
@@ -76,7 +75,6 @@ export const BarChart = ({ data }) => {
         kilogram: data.kilogram,
         calories: data.calories,
       },
-      pos: { x: event.clientX, y: event.clientY },
     })
   }
 
@@ -138,6 +136,7 @@ export const BarChart = ({ data }) => {
               }
               fill="#C4C4D4"
             />
+
             <rect
               x={xScaleKilogram.bandwidth() + 20}
               y={ySteps.at(-1).yOffset - 32}
@@ -150,6 +149,7 @@ export const BarChart = ({ data }) => {
               rx="3"
               ry="3"
             />
+
             <text
               fontSize="0.4375rem"
               opacity={
@@ -199,7 +199,7 @@ export const BarChart = ({ data }) => {
               className="cursor-pointer"
               opacity="0"
               fill="transparent"
-              onMouseEnter={event => onEnter(event, data)}
+              onMouseEnter={() => onEnter(data)}
               onMouseLeave={onLeave}
             />
           </g>
