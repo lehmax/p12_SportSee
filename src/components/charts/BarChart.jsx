@@ -8,17 +8,17 @@ const formatTime = d3.utcFormat('%A %d')
 const keys = ['kilogram', 'calories']
 
 const properties = data => {
-  const xScale0 = d3
+  const xScaleKilogram = d3
     .scaleBand()
     .range([0, 800])
     .domain(data.map(xAccessor))
     .paddingInner(0)
     .padding(0.8)
 
-  const xScale1 = d3
+  const xGroup = d3
     .scaleBand()
     .domain(keys)
-    .range([0, xScale0.bandwidth()])
+    .range([0, xScaleKilogram.bandwidth()])
     .padding(0.05)
 
   const yScaleKilogram = d3
@@ -32,9 +32,9 @@ const properties = data => {
     .nice()
     .range([250, 100])
 
-  const xTicks = xScale0.domain().map(value => ({
+  const xTicks = xScaleKilogram.domain().map(value => ({
     value: formatTime(new Date(value)),
-    xOffset: xScale0(value) + xScale0.bandwidth() / 2,
+    xOffset: xScaleKilogram(value) + xScaleKilogram.bandwidth() / 2,
   }))
 
   const ySteps = yScaleKilogram.domain().map(value => ({
@@ -43,8 +43,8 @@ const properties = data => {
   }))
 
   return {
-    xScale0,
-    xScale1,
+    xScaleKilogram,
+    xGroup,
     yScaleKilogram,
     yScaleCalories,
     xTicks,
@@ -59,14 +59,20 @@ export const BarChart = ({ data }) => {
     pos: { x: 0, y: 0 },
   })
 
-  const { xTicks, ySteps, xScale0, xScale1, yScaleCalories, yScaleKilogram } =
-    useMemo(() => properties(data), [])
+  const {
+    xTicks,
+    ySteps,
+    xScaleKilogram,
+    xGroup,
+    yScaleCalories,
+    yScaleKilogram,
+  } = useMemo(() => properties(data), [])
 
   const onEnter = (event, data) => {
-    console.log(data)
     setTooltip({
       display: true,
       data: {
+        day: data.day,
         kilogram: data.kilogram,
         calories: data.calories,
       },
@@ -117,26 +123,64 @@ export const BarChart = ({ data }) => {
           ))}
         </g>
         {data.map(data => (
-          <g key={data.day} transform={`translate(${xScale0(data.day)},0)`}>
+          <g
+            key={data.day}
+            transform={`translate(${xScaleKilogram(data.day)},0)`}
+          >
             <rect
-              fill="#DFDFDF"
-              y="250"
-              width={xScale0.bandwidth() * 2.5}
-              height="250"
-              onPointerLeave={onLeave}
-              onPointerEnter={event => onEnter(event, data)}
+              x={-xScaleKilogram.bandwidth()}
+              y={ySteps.at(-1).yOffset}
+              width={xScaleKilogram.bandwidth() * 3}
+              height={250 - ySteps.at(-1).yOffset}
+              className="cursor-pointer"
+              opacity={
+                tooltip.display && tooltip.data.day === data.day ? '0.5' : '0'
+              }
+              fill="#C4C4D4"
             />
+            <rect
+              x={xScaleKilogram.bandwidth() + 20}
+              y={ySteps.at(-1).yOffset - 32}
+              width="40px"
+              height="64px"
+              opacity={
+                tooltip.display && tooltip.data.day === data.day ? '1' : '0'
+              }
+              fill="#E60000"
+              rx="3"
+              ry="3"
+            />
+            <text
+              fontSize="0.4375rem"
+              opacity={
+                tooltip.display && tooltip.data.day === data.day ? '1' : '0'
+              }
+              fontWeight="500"
+              fill="white"
+            >
+              {keys.map((key, index) => (
+                <tspan
+                  x={xScaleKilogram.bandwidth() + 25}
+                  y={ySteps.at(-1).yOffset - 10}
+                  dy={index === keys.length - 1 && 30}
+                  key={key}
+                >
+                  {key === 'kilogram' ? `${data[key]} kg` : `${data[key]} kCal`}
+                </tspan>
+              ))}
+            </text>
+
             {keys.map(key => (
               <rect
                 key={key}
-                x={key === 'kilogram' ? xScale1(key) - 4 : xScale1(key) + 4}
+                x={key === 'kilogram' ? xGroup(key) - 4 : xGroup(key) + 4}
                 ry="5"
                 y={
                   key === 'kilogram'
                     ? yScaleKilogram(data[key])
                     : yScaleCalories(data[key])
                 }
-                width={xScale1.bandwidth()}
+                width={xGroup.bandwidth()}
                 height={
                   250 -
                   (key === 'kilogram'
@@ -146,6 +190,18 @@ export const BarChart = ({ data }) => {
                 fill={key === 'kilogram' ? '#282D30' : '#E60000'}
               />
             ))}
+
+            <rect
+              x={-xScaleKilogram.bandwidth()}
+              y={ySteps.at(-1).yOffset}
+              width={xScaleKilogram.bandwidth() * 3}
+              height={250 - ySteps.at(-1).yOffset}
+              className="cursor-pointer"
+              opacity="0"
+              fill="transparent"
+              onMouseEnter={event => onEnter(event, data)}
+              onMouseLeave={onLeave}
+            />
           </g>
         ))}
         <text>
