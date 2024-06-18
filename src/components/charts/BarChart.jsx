@@ -212,7 +212,7 @@ export const BarChart = ({ data }) => {
         <g>
           <circle cx="570" cy="35" r="3" fill="#282D30" />
           <text>
-            <tspan x="582" y="40" fill="#20253A" fontSize="0.875rem">
+            <tspan x="582" y="40" fill="#74798C" fontSize="0.875rem">
               Poids (kg)
             </tspan>
           </text>
@@ -220,7 +220,7 @@ export const BarChart = ({ data }) => {
         <g>
           <circle cx="680" cy="35" r="3" fill="#E60000" />
           <text>
-            <tspan x="692" y="40" fill="#20253A" fontSize="0.875rem">
+            <tspan x="692" y="40" fill="#74798C" fontSize="0.875rem">
               Calories (kCal)
             </tspan>
           </text>
