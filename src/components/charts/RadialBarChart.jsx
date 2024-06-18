@@ -14,7 +14,7 @@ const properties = data => {
     .innerRadius(radius * 0.9) // We want to have a donut shape
     .outerRadius(radius)
     .startAngle(0)
-    .endAngle(2 * Math.PI)
+    .endAngle(2 * Math.PI) // We want a complete circle
     .cornerRadius(10)
 
   const arc = d3

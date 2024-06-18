@@ -13,23 +13,24 @@ const initTooltipData = {
 }
 
 const properties = data => {
-  const xScale = d3
+  const xScale = d3 // create a scale for the x-axis
     .scaleLinear()
     .domain(d3.extent(data, xAccessor))
     .rangeRound([0, 280])
 
-  const yScale = d3
+  const yScale = d3 // create a scale for the y-axis
     .scaleLinear()
     .domain(d3.extent(data, yAccessor))
     .range([130, 0])
 
   const ticks = xScale.ticks(week.length).map(value => ({
+    // create the ticks for the x-axis
     value,
     label: week[value - 1],
     xOffset: xScale(value),
   }))
 
-  const lineGenerator = d3
+  const lineGenerator = d3 // create the line path
     .line()
     .x(d => xScale(xAccessor(d)))
     .y(d => yScale(yAccessor(d)))
@@ -58,10 +59,10 @@ export const LineChart = ({ data }) => {
 
   const onLeave = () => setTooltipData({ ...initTooltipData, visible: false })
 
-  const bisect = d3.bisector(xAccessor).left
+  const bisect = d3.bisector(xAccessor).left // create a bisector to find the closest data point
   const onMove = event => {
     const [pointerX] = d3.pointer(event)
-    const indexFound = bisect(data, xScale.invert(pointerX), 1)
+    const indexFound = bisect(data, xScale.invert(pointerX), 1) // find the closest data point from cursor
     const session = data[indexFound - 1]
 
     if (!session) return false

@@ -13,15 +13,16 @@ const properties = data => {
   const levelsDiameter = [22.5, 45, 90, 135, 180]
   const values = data.data.map(d => d.value)
   const maxRadius = levelsDiameter[levelsDiameter.length - 1] / 2
-  const length = 6
-  const angle = (2 * Math.PI) / length
+  const length = 6 // Number of categories/points
+  const angle = (2 * Math.PI) / length // 2 * Math.PI is a full circle
 
-  const axis = levelsDiameter.map(radius => {
+  const axis = levelsDiameter.map(diameter => {
+    // Create the axis (level hexagons)
     const polygon = d3
       .lineRadial()
-      .angle((_, i) => i * angle)
+      .angle((_, i) => i * angle) // Returns the angle of the point on the hexagon
       .curve(d3.curveLinearClosed)
-      .radius(() => radius / 2)
+      .radius(() => diameter / 2)
 
     return polygon(Array.from({ length }))
   })
@@ -29,11 +30,14 @@ const properties = data => {
   const categories = Object.entries(data.kind)
     .reverse()
     .map(([key, value], i) => {
+      const pointX = Math.cos(i * angle - Math.PI / 2) * (maxRadius + 28) //Returns the x coordinate of the point on the hexagon
+      const pointY = Math.sin(i * angle - Math.PI / 2) * (maxRadius + 10) //Returns the y coordinate
+
       return {
         key,
         value: labels[value],
-        x: Math.cos(i * angle - Math.PI / 2) * (maxRadius + 28),
-        y: Math.sin(i * angle - Math.PI / 2) * (maxRadius + 10),
+        x: pointX,
+        y: pointY,
       }
     })
 
