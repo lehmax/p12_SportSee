@@ -87,7 +87,7 @@ const Home = () => {
           Félicitation ! Vous avez explosé vos objectifs hier 👏
         </h2>
       </section>
-      <section className="grid grid-cols-4 grid-rows-4 gap-8">
+      <section className="grid grid-cols-4 gap-8">
         <div className="col-span-3 row-span-2">
           <ActivityChart />
         </div>
