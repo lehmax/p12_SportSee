@@ -162,7 +162,7 @@ export const BarChart = ({ data }) => {
                 <tspan
                   x={xScaleKilogram.bandwidth() + 25}
                   y={ySteps.at(-1).yOffset - 10}
-                  dy={index === keys.length - 1 && 30}
+                  dy={index === keys.length - 1 ? 30 : ''}
                   key={key}
                 >
                   {key === 'kilogram' ? `${data[key]} kg` : `${data[key]} kCal`}

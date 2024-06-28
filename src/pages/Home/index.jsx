@@ -1,5 +1,3 @@
-import { ENDPOINTS } from '../../config'
-
 import NutriCard from '../../components/NutriCard'
 import {
   BarChart,
@@ -9,23 +7,20 @@ import {
 } from '../../components/charts'
 
 import { useFetch } from '../../hooks/useFetch'
-import { useCurrentUser } from '../../hooks/useUser'
+import { useCurrentUser, useUserData } from '../../hooks/useUser'
 
-const Title = () => {
-  const user = useCurrentUser()
-
-  if (!user?.userInfos) return false
-
+const Title = ({ title }) => {
   return (
     <h1 className="mb-5 text-5xl">
       <span>{'Bonjour '}</span>
-      <strong className="text-red">{user.userInfos.firstName}</strong>
+      <strong className="text-red">{title}</strong>
     </h1>
   )
 }
 
 const ActivityChart = () => {
-  const { data, isError } = useFetch(ENDPOINTS.activity)
+  const { userEndpoints } = useCurrentUser()
+  const { data, isError } = useFetch(userEndpoints?.activity)
 
   if (!data?.sessions || isError) return false
 
@@ -33,7 +28,8 @@ const ActivityChart = () => {
 }
 
 const AverageSessionChart = () => {
-  const { data, isError } = useFetch(ENDPOINTS.averageSession)
+  const { userEndpoints } = useCurrentUser()
+  const { data, isError } = useFetch(userEndpoints?.averageSession)
 
   if (!data?.sessions || isError) return false
 
@@ -41,16 +37,15 @@ const AverageSessionChart = () => {
 }
 
 const PerformanceChart = () => {
-  const { data, isError } = useFetch(ENDPOINTS.performance)
+  const { userEndpoints } = useCurrentUser()
+  const { data, isError } = useFetch(userEndpoints?.performance)
 
   if (!data || isError) return false
 
   return <RadarChart data={data} />
 }
 
-const ScoreChart = () => {
-  const user = useCurrentUser()
-
+const ScoreChart = ({ user }) => {
   let data = ''
 
   if (user?.todayScore) {
@@ -64,9 +59,7 @@ const ScoreChart = () => {
   return <RadialBarChart data={data} />
 }
 
-const NutriCards = () => {
-  const user = useCurrentUser()
-
+const NutriCards = ({ user }) => {
   if (!user?.keyData) return false
 
   return (
@@ -79,10 +72,12 @@ const NutriCards = () => {
 }
 
 const Home = () => {
+  const { user } = useUserData()
+
   return (
     <main>
       <section className="mb-12">
-        <Title />
+        {user?.userInfos ? <Title title={user.userInfos?.firstName} /> : null}
         <h2 className="text-lg">
           Félicitation ! Vous avez explosé vos objectifs hier 👏
         </h2>
@@ -98,10 +93,10 @@ const Home = () => {
           <PerformanceChart />
         </div>
         <div className="row-span-2">
-          <ScoreChart />
+          <ScoreChart user={user} />
         </div>
         <div className="col-start-4 row-span-4 row-start-1">
-          <NutriCards />
+          <NutriCards user={user} />
         </div>
       </section>
     </main>

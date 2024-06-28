@@ -1,19 +1,17 @@
-import { createContext } from 'react'
-import { ENDPOINTS } from '../config'
-import { useFetch } from '../hooks/useFetch'
+import { createContext, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { createUserEndpoints } from '../config'
 
 export const CurrentUserContext = createContext()
-export const UserActivityContext = createContext()
-export const UserAverageSessionContext = createContext()
-export const UserPerformanceContext = createContext()
 
 export const CurrentUserProvider = ({ children }) => {
-  const { data: userInfo, isError } = useFetch(ENDPOINTS.user)
+  const { pathname } = useLocation()
+  const [userId] = useState(() => pathname.split('/').pop())
 
-  if (!userInfo || isError) return false
+  const userEndpoints = createUserEndpoints(userId)
 
   return (
-    <CurrentUserContext.Provider value={userInfo}>
+    <CurrentUserContext.Provider value={{ userId, userEndpoints }}>
       {children}
     </CurrentUserContext.Provider>
   )

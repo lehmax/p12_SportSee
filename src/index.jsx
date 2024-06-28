@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter, redirect } from 'react-router-dom'
 
 import Root from './Root.jsx'
 
@@ -19,6 +19,10 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        loader: async () => redirect('/user/12'),
+      },
+      {
+        path: '/user/:id',
         element: <Home />,
       },
       {

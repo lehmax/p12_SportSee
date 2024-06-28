@@ -1,8 +1,8 @@
-const userEndpoint = `${import.meta.env.VITE_ENDPOINT}`
+const USER_ENDPOINT = `${import.meta.env.VITE_ENDPOINT}`
 
-export const ENDPOINTS = {
-  user: `${userEndpoint}`,
-  activity: `${userEndpoint}/activity`,
-  averageSession: `${userEndpoint}/average-sessions`,
-  performance: `${userEndpoint}/performance`,
-}
+export const createUserEndpoints = userId => ({
+  user: `${USER_ENDPOINT}/${userId}`,
+  activity: `${USER_ENDPOINT}/${userId}/activity`,
+  averageSession: `${USER_ENDPOINT}/${userId}/average-sessions`,
+  performance: `${USER_ENDPOINT}/${userId}/performance`,
+})
