@@ -56,6 +56,13 @@ const properties = data => {
   }
 }
 
+/**
+ * Radar chart component.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.data - The data to display in the chart.
+ * @returns {JSX.Element} The radar chart component.
+ */
 export const RadarChart = ({ data }) => {
   const { axis, categories, valuePath } = useMemo(() => properties(data), [])
 

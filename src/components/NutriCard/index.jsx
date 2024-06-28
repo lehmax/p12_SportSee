@@ -30,6 +30,14 @@ const NUTRI_CONF = {
   },
 }
 
+/**
+ * NutriCard component.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.id - The card ID.
+ * @param {number} props.value - The card value.
+ * @returns {JSX.Element} The NutriCard component.
+ */
 const NutriCard = ({ id, value }) => {
   const { icon, type, color, unit } = NUTRI_CONF[id]
 

@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react'
 
-export const useFetch = (url) => {
+/**
+ * Custom hook to fetch data from a given URL.
+ *
+ * @param {string} url - The URL to fetch data from.
+ * @returns {Object} An object containing the following properties:
+ *   @returns {boolean} isLoading - Indicates if the data is currently being loaded.
+ *   @returns {Object|null} data - The fetched data, or null if not yet available.
+ *   @returns {boolean} isError - Indicates if there was an error during the fetch operation.
+ */
+export const useFetch = url => {
   const [data, setData] = useState(null)
   const [isLoading, setLoading] = useState(true)
   const [isError, setError] = useState(false)

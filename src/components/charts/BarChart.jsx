@@ -7,6 +7,12 @@ const xAccessor = data => data.day
 const formatTime = d3.utcFormat('%A %d')
 const keys = ['kilogram', 'calories']
 
+/**
+ * Get the properties for the bar chart.
+ * @param {Object[]} data - The data to display in the chart.
+ *
+ * @returns {Object} The properties for the bar chart.
+ */
 const properties = data => {
   const xScaleKilogram = d3
     .scaleBand()
@@ -52,6 +58,12 @@ const properties = data => {
   }
 }
 
+/**
+ * Bar chart component.
+ * @param {Object} props - The component props.
+ * @param {Object} props.data - The data to display in the chart.
+ * @returns {JSX.Element} The bar chart component.
+ */
 export const BarChart = ({ data }) => {
   const [tooltip, setTooltip] = useState({
     display: false,

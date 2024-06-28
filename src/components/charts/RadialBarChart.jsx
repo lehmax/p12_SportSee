@@ -1,5 +1,11 @@
 import * as d3 from 'd3'
 
+/**
+ * Get the properties for the radial bar chart.
+ *
+ * @param {number} data - The data to display in the chart.
+ * @returns {Object} The properties for the radial bar chart.
+ */
 const properties = data => {
   const score = data * 100
   const radius = 170 / 2
@@ -32,6 +38,13 @@ const properties = data => {
   }
 }
 
+/**
+ * Radial Bar chart component.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.data - The data to display in the chart.
+ * @returns {JSX.Element} The radial bar chart component.
+ */
 export const RadialBarChart = ({ data }) => {
   const { radius, arc, backgroundArc } = properties(data)
 

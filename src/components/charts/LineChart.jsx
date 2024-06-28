@@ -5,13 +5,12 @@ const week = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
 const yAccessor = data => data.sessionLength
 const xAccessor = data => data.day
 
-const initTooltipData = {
-  visible: false,
-  x: null,
-  y: null,
-  value: '',
-}
-
+/**
+ * Get the properties for the line chart.
+ *
+ * @param {Object[]} data - The data to display in the chart.
+ * @returns {Object} The properties for the line chart.
+ */
 const properties = data => {
   const xScale = d3 // create a scale for the x-axis
     .scaleLinear()
@@ -44,6 +43,13 @@ const properties = data => {
   }
 }
 
+/**
+ * Line chart component.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.data - The data to display in the chart.
+ * @returns {JSX.Element} The line chart component.
+ */
 export const LineChart = ({ data }) => {
   const extendedData = [
     { day: 0, sessionLength: 0 },
@@ -51,13 +57,19 @@ export const LineChart = ({ data }) => {
     { day: 8, sessionLength: 0 },
   ]
 
+  const initTooltipData = {
+    visible: false,
+    x: null,
+    y: null,
+    value: '',
+  }
+
   const [tooltipData, setTooltipData] = useState(initTooltipData)
+
   const { xScale, yScale, lineGenerator, ticks } = useMemo(
     () => properties(extendedData),
     []
   )
-
-  const marginTop = 55
 
   const bisect = d3.bisector(xAccessor).left // create a bisector to find the closest data point
 
@@ -134,7 +146,7 @@ export const LineChart = ({ data }) => {
             sessions
           </tspan>
         </text>
-        <g transform={`translate(-10,  ${marginTop})`}>
+        <g transform="translate(-10,  55)">
           <path
             d={lineGenerator(extendedData)}
             fill="none"
@@ -142,10 +154,7 @@ export const LineChart = ({ data }) => {
             strokeWidth="2"
           />
           {ticks.map(({ value, label, xOffset }) => (
-            <g
-              key={value}
-              transform={`translate(${xOffset}, ${marginTop + 130})`}
-            >
+            <g key={value} transform={`translate(${xOffset}, 185)`}>
               <text
                 key={value}
                 style={{
@@ -161,7 +170,7 @@ export const LineChart = ({ data }) => {
           ))}
         </g>
         <g
-          transform={`translate(-10,  ${marginTop})`}
+          transform="translate(-10,  55)"
           className={!tooltipData.visible ? 'opacity-0' : ''}
         >
           <circle
