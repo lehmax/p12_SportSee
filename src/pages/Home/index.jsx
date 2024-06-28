@@ -64,7 +64,7 @@ const NutriCards = ({ user }) => {
   if (!user?.keyData) return false
 
   return (
-    <div className="grid h-full gap-10">
+    <div className="grid h-full grid-cols-2 md:gap-10 md:grid-cols-1">
       {Object.entries(user.keyData).map(([key, value]) => (
         <NutriCard id={key} key={key} value={value} />
       ))}
@@ -87,19 +87,19 @@ const Home = () => {
         </h2>
       </section>
       <section className="grid grid-cols-4 gap-8">
-        <div className="col-span-3 row-span-2">
+        <div className="col-span-4 row-span-2 md:col-span-3">
           <ActivityChart />
         </div>
-        <div className="row-span-2">
+        <div className="col-span-2 md:col-span-1 md:row-span-2">
           <AverageSessionChart />
         </div>
-        <div className="row-span-2">
+        <div className="col-span-2 md:col-span-1 md:row-span-2">
           <PerformanceChart />
         </div>
-        <div className="row-span-2">
+        <div className="col-span-2 md:col-span-1 md:row-span-2">
           <ScoreChart user={user} />
         </div>
-        <div className="col-start-4 row-span-4 row-start-1">
+        <div className="order-first col-start-1 md:order-last col-span-full md:col-start-4 md:row-span-4 md:row-start-1">
           <NutriCards user={user} />
         </div>
       </section>
