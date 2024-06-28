@@ -2,7 +2,7 @@
 
 ### Description
 
-This project is a simple dashboard that dislays charts using D3.js from data fetched from a REST API. It is a simple project to learn D3.js and how to use with React.
+This project is a simple dashboard that dislays charts using D3.js from data fetched from a REST API. It is a simple project to learn D3.js and how to use it with React.
 
 ### Installation
 
