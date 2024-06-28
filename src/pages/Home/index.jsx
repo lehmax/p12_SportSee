@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import NutriCard from '../../components/NutriCard'
 import {
   BarChart,
@@ -73,6 +74,9 @@ const NutriCards = ({ user }) => {
 
 const Home = () => {
   const { user } = useUserData()
+  const navigate = useNavigate()
+
+  if (!user) return navigate('/404')
 
   return (
     <main>
